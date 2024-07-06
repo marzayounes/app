@@ -8,7 +8,6 @@ import os
 
 app = Flask(__name__)
 current_folder= os.getcwd()
-#current_folder = '/home/marzayounes32/flask_app/flask_app_'
 basepath = os.path.join(current_folder, "Models")
 # load models, threshold, data and explainer
 X_test = pd.read_csv(os.path.join(basepath, "X_test_sample.csv"))
