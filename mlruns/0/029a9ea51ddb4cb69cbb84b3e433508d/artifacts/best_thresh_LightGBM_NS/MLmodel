@@ -1,0 +1,19 @@
+artifact_path: best_thresh_LightGBM_NS
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.3.0
+    model_class: numpy.float64
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.10.9
+mlflow_version: 2.14.2
+model_size_bytes: 116
+model_uuid: 5db7515b29b54f4fb53ffdb416b07cc1
+run_id: 029a9ea51ddb4cb69cbb84b3e433508d
+utc_time_created: '2024-07-11 10:15:22.069682'
