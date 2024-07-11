@@ -1,0 +1,19 @@
+artifact_path: model
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.3.0
+    model_class: numpy.float64
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.10.9
+mlflow_version: 2.14.2
+model_size_bytes: 116
+model_uuid: c63996265d1f4cc08455100381ca38d0
+run_id: 117984ef8c43472a9d6bc89b4687bcf9
+utc_time_created: '2024-07-11 08:51:34.019572'
