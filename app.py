@@ -6,6 +6,7 @@ import json
 import numpy as np
 import os
 
+
 app = Flask(__name__)
 current_folder= os.getcwd()
 basepath = os.path.join(current_folder, "Models")
@@ -17,9 +18,9 @@ explainer = joblib.load(os.path.join(basepath, "explainer"))
 shap_values = pd.read_csv(os.path.join(basepath, "shap_values_sample.csv"))
 shap_values1 = pd.read_csv(os.path.join(basepath, "shap_values1_sample.csv"))
 expected_value = joblib.load(os.path.join(basepath, "expected_values.pkl"))
-
 model_load = joblib.load(os.path.join(basepath, "model.pkl"))
 best_thresh = joblib.load(os.path.join(basepath, "best_thresh_LightGBM_NS.pkl"))
+#Au lieu d'utiliser joblib.dump() et joblib.load(), vous pouvez essayer d'utiliser pickle.dump() et pickle.load() pour enregistrer et charger votre modèle
 #columns = shap_values.feature_names
 columns = joblib.load('Models/columns.pkl')
 data = pd.DataFrame(y_test, index=y_test.index).reset_index()
