@@ -1,4 +1,5 @@
 # from flask import Flask, jsonify, request, render_template
+import gzip
 from flask import Flask
 import joblib
 import pandas as pd
@@ -58,8 +59,20 @@ def predict(Client_Id: int):
         decision = "not granted"
     prob_predict = float(model_load.predict_proba(ID_to_predict)[:, 1])
     # on renvoie la prédiction 
-    return json.dumps({"decision" : decision, "prediction" : int(prediction), 
+    response=json.dumps({"decision" : decision, "prediction" : int(prediction), 
                        "prob_predict": prob_predict, "ID_to_predict" : ID_to_predict.to_json(orient='columns')})
+    
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 # provide data for shap features importance on selected customer's credit decision 
 @app.route("/cust_vs_group/<int:Client_Id>", methods=['GET'])
@@ -75,30 +88,102 @@ def cust_vs_group(Client_Id: int):
     else :
         decision = "not granted"
     # return json string
-    return json.dumps({'decision' : decision, 'base_value': shap_values.base_values[data_idx], 
+    response=json.dumps({'decision' : decision, 'base_value': shap_values.base_values[data_idx], 
                        'shap_values1_idx': shap_values1[data_idx, :].tolist(), \
     "ID_to_predict": ID_to_predict.to_json(orient='columns')})
+
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 
 @app.route("/load_top_10/", methods=['GET'])
 def load_top_10():
-    return json.dumps({"top_10" : top_10})
+    response=json.dumps({"top_10" : top_10})
+
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 @app.route("/load_top_20/", methods=['GET'])
 def load_top_20():
-    return json.dumps({"top_20" : top_20, 'feat_tot': feat_tot, 'feat_top': feat_top})
+    response=json.dumps({"top_20" : top_20, 'feat_tot': feat_tot, 'feat_top': feat_top})
+
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 @app.route("/load_best_thresh/", methods=['GET'])
 def load_best_thresh():
-    return {"best_thresh" : best_thresh} 
+    response={"best_thresh" : best_thresh} 
+
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 @app.route("/load_X_test/", methods=['GET'])
 def load_X_test():
-    return {"X_test" : pd.DataFrame(X_test).to_json(orient='columns')} 
+    response={"X_test" : pd.DataFrame(X_test).to_json(orient='columns')} 
+
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 @app.route("/load_data/", methods=['GET'])
 def load_data():
-    return {"data" : pd.DataFrame(data).to_json(orient='columns')} 
+    response={"data" : pd.DataFrame(data).to_json(orient='columns')} 
+
+    # Compression de la réponse avec gzip
+    compressed_response = gzip.compress(response.encode())
+    
+    # Ajout des en-têtes HTTP
+    headers = {
+        'Content-Encoding': 'gzip',
+        'Content-Type': 'application/json'
+    }
+    
+    # Renvoyer la réponse compressée avec les en-têtes
+    return (compressed_response, 200, headers)
 
 if __name__ == "__main__":
     print("Starting server on port 8500")
