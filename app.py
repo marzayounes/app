@@ -13,29 +13,23 @@ current_folder= os.getcwd()
 basepath = os.path.join(current_folder, "Models")
 # load models, threshold, data and explainer
 X_test = pd.read_csv(os.path.join(basepath, "X_test_sample.csv"))
-y_test = pd.read_csv(os.path.join(basepath, "y_test_sample.csv"))
-y_pred = pd.read_csv(os.path.join(basepath, "y_pred_sample.csv"))
+#commenter y_test 
+#y_test = pd.read_csv(os.path.join(basepath, "y_test_sample.csv"))
 explainer = joblib.load(os.path.join(basepath, "explainer"))
 shap_values = pd.read_csv(os.path.join(basepath, "shap_values_sample.csv"))
 shap_values1 = pd.read_csv(os.path.join(basepath, "shap_values1_sample.csv"))
 expected_value = joblib.load(os.path.join(basepath, "expected_values.pkl"))
 model_load = joblib.load(os.path.join(basepath, "model.pkl"))
 best_thresh = joblib.load(os.path.join(basepath, "best_thresh_LightGBM_NS.pkl"))
-#Au lieu d'utiliser joblib.dump() et joblib.load(), vous pouvez essayer d'utiliser pickle.dump() et pickle.load() pour enregistrer et charger votre modèle
+
 #columns = shap_values.feature_names
 columns = joblib.load('Models/columns.pkl')
-data = pd.DataFrame(y_test, index=y_test.index).reset_index()
-#data["PRED"] = y_pred
+#remplacer y_test par X_test
+data = pd.DataFrame(X_test, index=X_test.index).reset_index()
 
-# Compute feature importance
-# compute mean of absolute values for shap values
-vals = np.abs(shap_values1).mean(0)
-# compute feature importance as a dataframe containing vals
-feature_importance = pd.DataFrame(list(zip(columns, vals)),\
-    columns=['col_name','feature_importance_vals'])
-# Define top 10 features for customer details
+vals = np.abs(X_test).mean(0)
+feature_importance = pd.DataFrame(list(zip(columns, vals)), columns=['col_name', 'feature_importance_vals'])
 top_10 = feature_importance.sort_values(by='feature_importance_vals', ascending=False)[0:10].col_name.tolist()
-# Define top 20 features for comparison vs group
 top_20 = feature_importance.sort_values(by='feature_importance_vals', ascending=False)[0:20].col_name.tolist()
 feat_tot = feature_importance.feature_importance_vals.sum()
 feat_top = feature_importance.loc[feature_importance['col_name'].isin(top_20)].feature_importance_vals.sum()
